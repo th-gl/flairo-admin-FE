@@ -27,7 +27,7 @@ export default function SearchArea(props) {
         {
             /* SEARCH BOX */
         }
-        {/* <TextField value={value} onChange={onChange} placeholder="Search..." slotProps={{
+        {/* <TextField value={value}    onChange={onChange} placeholder="Search..." slotProps={{
             input: {
                 startAdornment: <Search />
             }
