@@ -583,7 +583,7 @@ export default function ServiceList() {
 
         <TablePagination
           page={page}
-          count={showMockData ? filteredUsers.length : totalRecords}
+          count={totalRecords}
           rowsPerPage={rowsPerPage}
           component="div"
           onPageChange={handleChangePage}
