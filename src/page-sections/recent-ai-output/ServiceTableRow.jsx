@@ -349,11 +349,11 @@ const formatTimestamp = (timestamp) => {
               }}
             /> */}
 
-            <TableMoreMenuItem
+            {/* <TableMoreMenuItem
               Icon={DeleteOutline}
               title={t("Delete")}
               handleClick={handleDeleteConfirmation}
-            />
+            /> */}
           </TableMoreMenu>
         </TableCell>
       </TableRow>
