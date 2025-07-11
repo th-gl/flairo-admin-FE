@@ -39,6 +39,25 @@ import { DB } from "@/contexts/firebaseContext.jsx";
 import { toast } from "react-toastify";
 import { Grid, IconButton, Tooltip } from "@mui/material";
 
+function safeParseJSON(str) {
+  if (typeof str !== "string") return str;
+  let cleaned = str.trim();
+  if (cleaned.startsWith("```json")) {
+    cleaned = cleaned.replace(/^```json/, "");
+  }
+  if (cleaned.startsWith("```")) {
+    cleaned = cleaned.replace(/^```/, "");
+  }
+  if (cleaned.endsWith("```")) {
+    cleaned = cleaned.replace(/```$/, "");
+  }
+  try {
+    return JSON.parse(cleaned);
+  } catch (e) {
+    return { error: "Invalid JSON", raw: str };
+  }
+}
+
 const getStatusColor = (status) => {
   switch (status) {
     case PROMPT_STATUS.ACTIVE:
@@ -274,12 +293,17 @@ export default function ServiceTableRow(props) {
         <DialogContent>
           <Box sx={{ pt: 2 }}>
             <DialogContent>
-              {user.response &&
-                Object.entries(
-                  typeof user.response === "string"
-                    ? JSON.parse(user.response)
-                    : user.response
-                ).map(([key, section]) => (
+              {user.response && (() => {
+                const parsed = safeParseJSON(user.response);
+                if (parsed.error) {
+                  return (
+                    <Box sx={{ color: "red" }}>
+                      <Paragraph>Error: Invalid JSON</Paragraph>
+                      <pre>{parsed.raw}</pre>
+                    </Box>
+                  );
+                }
+                return Object.entries(parsed).map(([key, section]) => (
                   <Box key={key} mb={3}>
                     <Paragraph
                       variant="subtitle2"
@@ -301,7 +325,8 @@ export default function ServiceTableRow(props) {
                       </Paragraph>
                     </Box>
                   </Box>
-                ))}
+                ));
+              })()}
             </DialogContent>
           </Box>
         </DialogContent>
